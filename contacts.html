@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Контакты</title>
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <link rel="stylesheet" href="src/assets/styles/style.css">
 </head>
 
 <body>
   <header>
-    <img src="logocat.png">
+    <img src="logocat.png" alt="Логотип" height="80">
     <nav>
-      <ul>
+      <ul class="breadcrumb-ul">
         <li><a href="index.html">Главная</a></li>
         <li><a href="contacts.html">Контакты</a></li>
       </ul>
     </nav>
   </header>
-
-  <main>
-    <h2>Contact Us</h2>
+    <h2 class="style-h2">Contact Us</h2>
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
     <img src="logocat2.png" width="100">
 
@@ -42,6 +42,8 @@
     </ul>
 
     <h4>Send us message</h4>
+
+
     <form>
       <label for="fullName">Full Name:</label>
       <input type="text" id="fullName" name="fullName" required>
@@ -52,9 +54,9 @@
       <label for="message">Message:</label>
       <textarea id="message" name="message" rows="4" required></textarea>
 
-      <input type="submit" value="Submit">
+      <button type="submit" class="CSSsubmit">Submit</button>
     </form>
-  </main>
+
 
   <footer>
     <h3>Подвал странички</h3>
