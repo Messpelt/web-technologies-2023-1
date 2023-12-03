@@ -3,11 +3,16 @@
 <head>
     <title>IT website</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="src/assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
 <div class="nav">
-        <span class="itwebsite"><a href="index.html">IT WEBSITE</a></span>
+        <span class="itwebsite"><a href="index.html"><img src="src/assets/img/Logo.svg"></a></span>
         <ul class="nav-menu">
             <li><a href="#">Services</a></li>
             <li><a href="#">Media</a></li>
@@ -15,36 +20,38 @@
             <li><a href="#">FAQ</a></li>
             <li><a href="#">Contacts</a></li>
         </ul>
+        <div class="Contacts"></div>
         <ul class="Telephones">
-            <li><img src="src/assets/icons/phone.png" width="2%" height="auto" alt="Phone">
-            <a href="phone:+791111111111">+7 (111) 111 11 11</a>
-            <a href="phone:+791111111111">+7 (111) 111 11 11</a>
-            </li>
+            <li><img src="src/assets/icons/phone.svg" alt="Telephones"></li>
+            <li><a href="phone:+791111111111">+7 (111) 111 11 11</a></li>
+            <li><a href="phone:+791111111111">+7 (111) 111 11 11</a></li>
         </ul>
         <ul class="Pocht">
-            <li><img src="src/assets/icons/letter.png" width="2%" height="auto" alt="Mail"> 
-                <a href="mailto:itcompany@mail.com">itcompany@mail.com</a>
-            </li>
+            <li><img src="src/assets/icons/pocht.svg" alt="Pocht"> </li>
+            <li> <a href="mailto:itcompany@mail.com">itcompany@mail.com</a></li>
         </ul>
+        </div>
 </div>
 
 <hr>
 
 <div class="Info">
     <div class="text-info">
-        <h2>Development of mobile applications and web services of any complexity</h2>
-        <p>We create mobile applications for iOS, Android that transfer your business to mobile applications of your customers' devices</p>
+        <h2>Development of <span class="highlighting">mobile applications</span> and <span class="highlighting">web services</span> of any complexity</h2>
+<p>We create mobile applications for iOS, Android that transfer your business to mobile applications of your customers' devices</p>
     </div>
     <div class="contacts-info">
         <h3>Leave your contacts and we will call you back within 30 minutes</h3>
-        <div class="Contacts">
-            <form>
-                <label>Phone number: </label>
-                <img src="src/assets/icons/flagKaz.png" width="1%" height="auto">
-                <input class="input" type="text" name="phone-number">
-                <label>Full name: </label>
-                <input class="input" type="text" name="full-name">
-                <input class="button" type="submit" value="Get consultation"><br>
+        <div class="Contacts-form">
+            <form class="contacts-form-content">
+                <label>Phone:
+                <input type="text" placeholder="+7 (111) 111-11-11">
+                </label>
+                
+                <label>Full name
+                <input type="text" placeholder="Иван Иванов">
+                </label>
+                <button class="form-button" type="submit">Get consultation</button>
             </form>
         </div>
     </div>
@@ -241,7 +248,7 @@
             <input class="button" type="submit" value="Send me ebook to my mail"><br>
         </form>
     </div>
-    <div class="background-book">
+    <div class="background-image">
         <img src="">
     </div>
 </div>
@@ -285,23 +292,39 @@
 <div class="Footer">
     <h2>IT WEBSITE</h2>
     <ul class="Footer-picture">
-        <li><img src="src/assets/icons/Grayphone.png" width="2%" height="auto" alt="Contact nums">Contact nums <br>
-            +7 (778) 395 90 26
+        <li>
+            <h3>
+                <img src="src/assets/icons/GrayPhone.svg">
+                Contact nums
+            </h3>
+            <p>+7 (778) 395 90 26</p>
         </li>
-        <li><img src="src/assets/icons/Grayletter.png" width="2%" height="auto" alt="Post">Post <br>
-            mail@mail.com
+        <li>
+            <h3>
+                <img src="src/assets/icons/GrayPocht.svg">
+                Post
+            </h3>
+            <p>mail@mail.com</p>
         </li>
-        <li><img src="src/assets/icons/Graylocation.png" width="2%" height="auto" alt="Address">Address <br> 
-            City city, street st. 90
+        <li>
+            <h3>
+                <img src="src/assets/icons/GrayLoc.svg">
+                Address
+            </h3>
+            <p>City city, steet st. 90</p>
         </li>
-        <li><img src="src/assets/icons/Grayfile.png" width="2%" height="auto" alt="Request">Leave a request <br>
-            Leave a request
+        <li>
+            <h3>
+                <img src="src/assets/icons/GrayFile.svg">
+                Leave a request
+            </h3>
+            <p>Leave a request</p>
         </li>
     </ul>
-    <ul class="footer-end-label">
-        <li><img src="src/assets/icons/Grayworld.png" width="2%" height="auto" alt="End img">We work throughout world</li>
+    <ul class="footers-label">
+    <li><img src="src/assets/img/Country.jpg"> We work throughout world</li>
     </ul>
-</div>
+    </div>
 
 </body>
 </html>
