@@ -1,148 +1,111 @@
-<?php
-
-// Задание1
-
-$num = 0;
-echo '<h1>Задание 1</h1>';
-
-do
-{
-    if ($num == 0) {
-        $result1 = '<p>' . $num . ' - это ноль.</p>';
-    } else if ($num % 2 == 0) {
-        $result1 = '<p>' . $num . ' - это четное число.</p>';
-    } else {
-        $result1 = '<p>' . $num . ' - это нечетное число.</p>';
-    }
-    $num += 1;
-    echo $result1;
-} while ($num <= 10);
-
-
-// Задание2
-
-$cities = [
-"Московская область" => [
-    "Москва",
-    "Зеленоград",
-    "Клин"
-],
-"Ленинградская область" => [
-    "Санкт-Петербург",
-    "Всеволожск",
-    "Павловск",
-    "Кронштадт"
-],
-"Рязанская область" => [
-    "Рязань",
-    "Скопин",
-    "Рыбное"
-]
-];
-
-$result2 = "";
-echo '<h1>Задание 2</h1>';
-
-foreach($cities as $citykey => $cityvalue) {
-    $result2 = "<p>" . $citykey . ":</p>";
-    $result2 .= implode(", ", $cityvalue);
-    echo $result2;
-}
-
-// Задание3
-
-$letters = ["а" => "a", "б" => "b", 'в' => 'v', "г" => "g", "д" => "d", "е" => "e", "ё" => "e", "ж" => "zh",
-"з" => "z", "и" => "i", "й" => "y", 'к' => 'k', "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p",
-"р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "kh", "ц" => "ts", "ч" => "ch",
-"ш" => "sh", "щ" => "shch", "ъ" => "'", "ы" => "y", "ь" => "'", "э" => "e", "ю" => "yu", "я" => "ya"];
-
-echo '<h1>Задание 3</h1>';
-
-function transliteration($words, $arrLetters) {
-    $resultStr = "";
-
-    for($i = 0, $len = mb_strlen($words); $i < $len; $i++) {
-        $char = mb_substr($words, $i, 1);
-        if (isset($arrLetters[$char])) {
-            $resultStr .= $arrLetters[$char];
-        }
-        else {
-            $resultStr .= $char;
-        }
-    }
-    echo $resultStr;
-}
-
-transliteration("я сегодня шла за картошкой в огород.", $letters);
-
-// Задание4
-
-$values = [
-    [
-        'name' => 'Пункт 1',
-        'child' => [[
-            'name' => 'Пункт 1.1',
-            'child' => [[
-                'name' => 'Пункт 1.1.1'
-            ]]
-        ]]
-    ],
-    [
-        'name' => 'Пункт 2',
-        'child' => [[
-            'name' => 'Пункт 2.1'
-        ]]
-    ]
-];
-
-echo '<h1>Задание 4</h1>';
-
-function createMenu($menu) {
-    echo '<ul>';
-    foreach($menu as $point) {
-        echo '<li>' . $point['name'];
-        if (isset($point['child'])) {
-            createMenu($point['child']);
-        }
-        echo '</li>';
-    }
-    echo '</ul>';
-}
-
-createMenu($values);
-
-// Задание6
-
-echo '<h1>Задание 6</h1>';
-
-function getCityWithK($value) {
-    return mb_substr($value, 0, 1) == 'К' || mb_substr($value, 0, 1) == 'к';
-}
-
-function filterArray($value) {
-    foreach($value as $key => $city) {
-        $cityWithK = array_filter($city, 'getCityWithK');
-        if (count($cityWithK) > 0) {
-            $result2 = "<p>" . $key . ":</p>";
-            $result2 .= implode(", ", $cityWithK);
-            echo $result2;
-        }
-    }
-}
-
-filterArray($cities);
-
-
-?>
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Задание 18</title>
+  <meta charset="utf-8">
+  <title>Галерея фотографий</title>
+  <style>
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      margin: 20px;
+    }
+    .gallery a {
+      margin: 10px;
+    }
+    .gallery img {
+      border: 1px solid black;
+    }
+  </style>
 </head>
 <body>
+  <?php
+    function build_gallery($dir) {
+      $handle = opendir($dir);
+      $files = array();
+      while ($file = readdir($handle)) {
+        if (preg_match("/\.(jpg|png|gif)$/i", $file)) {
+          $files[] = $file;
+        }
+      }
+      closedir($handle);
+      sort($files);
+      echo "<div class='gallery'>";
+      foreach ($files as $file) {
+        list($width, $height) = getimagesize($dir . "/" . $file);
+        $thumb_width = 200;
+        $thumb_height = $height * $thumb_width / $width;
+        echo "<a href='$dir/$file' target='_blank'>";
+        echo "<img src='$dir/$file' width='$thumb_width' height='$thumb_height'>";
+        echo "</a>";
+      }
+      echo "</div>";
+    }
+
+    function upload_image($dir) {
+      if (isset($_FILES['image'])) {
+        if (preg_match("/\.(jpg|png|gif)$/i", $_FILES['image']['name'])) {
+          if ($_FILES['image']['size'] <= 5 * 1024 * 1024) {
+            $name = $_FILES['image']['name'];
+            $ext = pathinfo($name, PATHINFO_EXTENSION);
+            $new_name = uniqid() . "." . $ext;
+            move_uploaded_file($_FILES['image']['tmp_name'], $dir . "/" . $new_name);
+            list($width, $height) = getimagesize($dir . "/" . $new_name);
+            $thumb_width = 200;
+            $thumb_height = $height * $thumb_width / $width;
+            $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
+            switch ($ext) {
+              case "jpg":
+                $source = imagecreatefromjpeg($dir . "/" . $new_name);
+                break;
+              case "png":
+                $source = imagecreatefrompng($dir . "/" . $new_name);
+                break;
+              case "gif":
+                $source = imagecreatefromgif($dir . "/" . $new_name);
+                break;
+            }
+            imagecopyresized($thumb, $source, 0, 0, 0, 0, 
+                             $thumb_width, $thumb_height, 
+                             $width, $height);
+            switch ($ext) {
+              case "jpg":
+                imagejpeg($thumb, $dir . "/" . $new_name);
+                break;
+              case "png":
+                imagepng($thumb, $dir . "/" . $new_name);
+                break;
+              case "gif":
+                imagegif($thumb, $dir . "/" . $new_name);
+                break;
+            }
+            imagedestroy($thumb);
+            imagedestroy($source);
+            return $new_name;
+          } else {
+            echo "<p>Файл слишком большой. Максимальный размер - 5 МБ.</p>";
+          }
+        } else {
+          echo "<p>Файл не является изображением. Допустимые форматы - jpg, png, gif.</p>";
+        }
+      }
+    }
+
+    $dir = "images";
+    if (!file_exists($dir)) {
+      mkdir($dir);
+    }
+    $uploaded = upload_image($dir);
+    if ($uploaded) {
+      header("Location: " . $_SERVER['PHP_SELF']);
+      exit();
+    }
+    echo "<form method='post' enctype='multipart/form-data'>";
+    echo "<input type='file' name='image'>";
+    echo "<input type='submit' value='Загрузить'>";
+    echo "</form>";
+    build_gallery($dir);
+  ?>
 </body>
 </html>
