@@ -1,127 +1,148 @@
 <?php
-$a = -10;
-$b = -5;
 
-//Задание 1
-if ($a >= 0 && $b >= 0) {
-    $result = $a - $b;
-} else if ($a < 0 && $b < 0) {
-    $result = $a * $b;
-} else {
-    $result = $a + $b;
-}
-echo ("<p><b>Задание 1</b></p>" . "<p>Результат = " . $result . "</p>");
+// Задание1
 
-//Задание 2
-$a = 7;
-$result2 = "";
+$num = 0;
+echo '<h1>Задание 1</h1>';
 
-switch($a) {
-    case 0:
-            $result2 .= "0 ";
-        case 1:
-            $result2 .= "1 ";
-        case 2:
-            $result2 .= "2 ";
-        case 3:
-            $result2 .= "3";
-        case 4:
-            $result2 .= "4 ";
-        case 5:
-            $result2 .= "5 ";
-        case 6:
-            $result2 .= "6 ";
-        case 7:
-            $result2 .= "7 ";
-        case 8:
-            $result2 .= "8 ";
-        case 9:
-            $result2 .= "9 ";
-        case 10:
-            $result2 .= "10 ";
-        case 11:
-            $result2 .= "11 ";
-        case 12:
-            $result2 .= "12 ";
-        case 13:
-            $result2 .= "13 ";
-        case 14:
-            $result2 .= "14 ";
-        case 15:
-            $result2 .= "15";
-            break;
-        default:
-            $result2 = "Значение не входит в промежуток";
-            break;
-}
-
-echo ("<p><b>Задание 2</b></p>" . "<p>Результат = " . $result2 . "</p>");
-
-//Задание 3
-function summ($a, $b) {
-    return $a + $b;
-}
-
-function multiplication($a, $b) {
-    return $a * $b;
-}
-
-function difference($a, $b) {
-    return $a - $b;
-}
-
-function division($a, $b) {
-    return $a / $b;
-}
-
-echo ("<p><b>Задание 3</b></p>" .
-"<p>3 + 5 = " . summ(3, 5) . "</p>" .
-"<p>8 - 4 = " . difference(8, 4) . "</p>" .
-"<p>7 * 4 = " . multiplication(7, 4) . "</p>" .
-"<p>9 / 3 = " . division(9, 3) . "</p>");
-
-//Задание 4
-function mathOperation($arg1, $arg2, $operation) {
-    switch ($operation) {
-        case 'сумма':
-            return summ($arg1, $arg2);
-            break;
-        case 'деление':
-            return division($arg1, $arg2);
-            break;
-        case 'умножение':
-            return multiplication($arg1, $arg2);
-            break;
-        case 'разность':
-            return difference($arg1, $arg2);
-            break;
-        default:
-            return 0;
-            break;
-    }
-}
-echo ("<p><b>Задание 4</b></p>" .
-"<p>Сумма чисел 15 и 7 = " . mathOperation(15, 7, "сумма") . "</p>");
-
-//Задание 6
-function power($val, $pow) {
-    if ($pow == 1) {
-        return $val;
+do
+{
+    if ($num == 0) {
+        $result1 = '<p>' . $num . ' - это ноль.</p>';
+    } else if ($num % 2 == 0) {
+        $result1 = '<p>' . $num . ' - это четное число.</p>';
     } else {
-        return $val * power($val, $pow - 1);
+        $result1 = '<p>' . $num . ' - это нечетное число.</p>';
+    }
+    $num += 1;
+    echo $result1;
+} while ($num <= 10);
+
+
+// Задание2
+
+$cities = [
+"Московская область" => [
+    "Москва",
+    "Зеленоград",
+    "Клин"
+],
+"Ленинградская область" => [
+    "Санкт-Петербург",
+    "Всеволожск",
+    "Павловск",
+    "Кронштадт"
+],
+"Рязанская область" => [
+    "Рязань",
+    "Скопин",
+    "Рыбное"
+]
+];
+
+$result2 = "";
+echo '<h1>Задание 2</h1>';
+
+foreach($cities as $citykey => $cityvalue) {
+    $result2 = "<p>" . $citykey . ":</p>";
+    $result2 .= implode(", ", $cityvalue);
+    echo $result2;
+}
+
+// Задание3
+
+$letters = ["а" => "a", "б" => "b", 'в' => 'v', "г" => "g", "д" => "d", "е" => "e", "ё" => "e", "ж" => "zh",
+"з" => "z", "и" => "i", "й" => "y", 'к' => 'k', "л" => "l", "м" => "m", "н" => "n", "о" => "o", "п" => "p",
+"р" => "r", "с" => "s", "т" => "t", "у" => "u", "ф" => "f", "х" => "kh", "ц" => "ts", "ч" => "ch",
+"ш" => "sh", "щ" => "shch", "ъ" => "'", "ы" => "y", "ь" => "'", "э" => "e", "ю" => "yu", "я" => "ya"];
+
+echo '<h1>Задание 3</h1>';
+
+function transliteration($words, $arrLetters) {
+    $resultStr = "";
+
+    for($i = 0, $len = mb_strlen($words); $i < $len; $i++) {
+        $char = mb_substr($words, $i, 1);
+        if (isset($arrLetters[$char])) {
+            $resultStr .= $arrLetters[$char];
+        }
+        else {
+            $resultStr .= $char;
+        }
+    }
+    echo $resultStr;
+}
+
+transliteration("я сегодня шла за картошкой в огород.", $letters);
+
+// Задание4
+
+$values = [
+    [
+        'name' => 'Пункт 1',
+        'child' => [[
+            'name' => 'Пункт 1.1',
+            'child' => [[
+                'name' => 'Пункт 1.1.1'
+            ]]
+        ]]
+    ],
+    [
+        'name' => 'Пункт 2',
+        'child' => [[
+            'name' => 'Пункт 2.1'
+        ]]
+    ]
+];
+
+echo '<h1>Задание 4</h1>';
+
+function createMenu($menu) {
+    echo '<ul>';
+    foreach($menu as $point) {
+        echo '<li>' . $point['name'];
+        if (isset($point['child'])) {
+            createMenu($point['child']);
+        }
+        echo '</li>';
+    }
+    echo '</ul>';
+}
+
+createMenu($values);
+
+// Задание6
+
+echo '<h1>Задание 6</h1>';
+
+function getCityWithK($value) {
+    return mb_substr($value, 0, 1) == 'К' || mb_substr($value, 0, 1) == 'к';
+}
+
+function filterArray($value) {
+    foreach($value as $key => $city) {
+        $cityWithK = array_filter($city, 'getCityWithK');
+        if (count($cityWithK) > 0) {
+            $result2 = "<p>" . $key . ":</p>";
+            $result2 .= implode(", ", $cityWithK);
+            echo $result2;
+        }
     }
 }
-echo ("<p><b>Задание 6</b></p>" .
-"<p>Число 2 в 4 степени = " . power(2, 4) . "</p>");
+
+filterArray($cities);
+
+
 ?>
 
+
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Задание 17</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Задание 18</title>
 </head>
 <body>
-
 </body>
 </html>
