@@ -1,111 +1,83 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Галерея фотографий</title>
-  <style>
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      margin: 20px;
-    }
-    .gallery a {
-      margin: 10px;
-    }
-    .gallery img {
-      border: 1px solid black;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>List Item</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <?php
-    function build_gallery($dir) {
-      $handle = opendir($dir);
-      $files = array();
-      while ($file = readdir($handle)) {
-        if (preg_match("/\.(jpg|png|gif)$/i", $file)) {
-          $files[] = $file;
+<script src="script.js"></script>
+<?php
+
+    $conn_string = "host=localhost port=5432 dbname=php20 user=postgres password=12345";
+    $conn = pg_connect($conn_string);
+
+    $query = "SELECT * FROM menu";
+    $result = pg_query($conn, $query);
+    pg_close($conn);
+    $menu_db_table = pg_fetch_all($result);
+
+    $first_el_table = $menu_db_table[0];
+    $menu = ["name" => $first_el_table["name"], "hasChildren" => $first_el_table["has_children"], "items" => []];
+
+
+
+    $menu["items"] = buildMenu($menu_db_table, $first_el_table['id']);
+
+    function buildMenu($items, $parentId)
+    {
+        $item_childrens = [];
+        foreach ($items as $item)
+        {
+
+            if ($item["parent_id"] === $parentId)
+            {
+                $children = [];
+                $children["name"] = $item["name"];
+
+                if($item["has_children"] == "t")
+                {
+                    $children["hasChildren"] = true;
+                    $children["items"] = buildMenu($items, $item['id']);
+                }
+                elseif ($item["has_children"] == "f")
+                {
+                    $children["hasChildren"] = false;
+                    $children["items"] = [];
+                }
+
+                $item_childrens[] = $children;
+            }
         }
-      }
-      closedir($handle);
-      sort($files);
-      echo "<div class='gallery'>";
-      foreach ($files as $file) {
-        list($width, $height) = getimagesize($dir . "/" . $file);
-        $thumb_width = 200;
-        $thumb_height = $height * $thumb_width / $width;
-        echo "<a href='$dir/$file' target='_blank'>";
-        echo "<img src='$dir/$file' width='$thumb_width' height='$thumb_height'>";
-        echo "</a>";
-      }
-      echo "</div>";
+        return $item_childrens;
     }
 
-    function upload_image($dir) {
-      if (isset($_FILES['image'])) {
-        if (preg_match("/\.(jpg|png|gif)$/i", $_FILES['image']['name'])) {
-          if ($_FILES['image']['size'] <= 5 * 1024 * 1024) {
-            $name = $_FILES['image']['name'];
-            $ext = pathinfo($name, PATHINFO_EXTENSION);
-            $new_name = uniqid() . "." . $ext;
-            move_uploaded_file($_FILES['image']['tmp_name'], $dir . "/" . $new_name);
-            list($width, $height) = getimagesize($dir . "/" . $new_name);
-            $thumb_width = 200;
-            $thumb_height = $height * $thumb_width / $width;
-            $thumb = imagecreatetruecolor($thumb_width, $thumb_height);
-            switch ($ext) {
-              case "jpg":
-                $source = imagecreatefromjpeg($dir . "/" . $new_name);
-                break;
-              case "png":
-                $source = imagecreatefrompng($dir . "/" . $new_name);
-                break;
-              case "gif":
-                $source = imagecreatefromgif($dir . "/" . $new_name);
-                break;
-            }
-            imagecopyresized($thumb, $source, 0, 0, 0, 0, 
-                             $thumb_width, $thumb_height, 
-                             $width, $height);
-            switch ($ext) {
-              case "jpg":
-                imagejpeg($thumb, $dir . "/" . $new_name);
-                break;
-              case "png":
-                imagepng($thumb, $dir . "/" . $new_name);
-                break;
-              case "gif":
-                imagegif($thumb, $dir . "/" . $new_name);
-                break;
-            }
-            imagedestroy($thumb);
-            imagedestroy($source);
-            return $new_name;
-          } else {
-            echo "<p>Файл слишком большой. Максимальный размер - 5 МБ.</p>";
-          }
-        } else {
-          echo "<p>Файл не является изображением. Допустимые форматы - jpg, png, gif.</p>";
-        }
-      }
-    }
+    $menu_container = render($menu);
+    echo '<div class="list-items" id="list-items">' . $menu_container .'</div>';
+    function render($data)
+    {
+        $menu = '<div class="list-item list-item_open" data-parent><div class="list-item__inner">' .
+            '<img class="list-item__arrow" src="img/chevron-down.png" alt="chevron-down" data-open>' .
+            '<img class="list-item__folder" src="img/folder.png" alt="folder">' . '<span>' . $data['name'] . '</span>' .
+            '</div>' . '<div class="list-item__items">';
 
-    $dir = "images";
-    if (!file_exists($dir)) {
-      mkdir($dir);
+        foreach ($data["items"] as $item)
+        {
+            if ($item["hasChildren"])
+            {
+                $menu .= render($item);
+            }
+            else
+            {
+                $menu .= '<div class="list-item__inner">' .
+                    '<img class="list-item__folder" src="img/folder.png" alt="folder">' . '<span>' . $item['name'] . '</span>' .
+                    '</div>';
+            }
+        }
+
+        $menu .= '</div></div>';
+        return $menu;
     }
-    $uploaded = upload_image($dir);
-    if ($uploaded) {
-      header("Location: " . $_SERVER['PHP_SELF']);
-      exit();
-    }
-    echo "<form method='post' enctype='multipart/form-data'>";
-    echo "<input type='file' name='image'>";
-    echo "<input type='submit' value='Загрузить'>";
-    echo "</form>";
-    build_gallery($dir);
-  ?>
+?>
 </body>
 </html>
